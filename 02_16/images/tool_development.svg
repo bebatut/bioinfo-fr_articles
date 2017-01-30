@@ -17,10 +17,11 @@
    version="1.1"
    inkscape:version="0.91 r13725"
    sodipodi:docname="tool_development.svg"
-   inkscape:export-filename="/Users/bebatut/Documents/perso/bioinfo-fr_articles/02_16/images/tool_deployment.png"
+   inkscape:export-filename="/Users/bebatut/Documents/perso/bioinfo-fr_articles/02_16/images/tool_development.png"
    inkscape:export-xdpi="44.173561"
    inkscape:export-ydpi="44.173561"
-   style="enable-background:new">
+   style="enable-background:new"
+   enable-background="new">
   <defs
      id="defs4">
     <marker
@@ -1291,6 +1292,16 @@
          d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
          id="path18611-2-0-3-2" />
     </marker>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter5154">
+      <feBlend
+         inkscape:collect="always"
+         mode="screen"
+         in2="BackgroundImage"
+         id="feBlend5156" />
+    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -1300,7 +1311,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.43787763"
-     inkscape:cx="1155.4236"
+     inkscape:cx="1065.2157"
      inkscape:cy="429.6936"
      inkscape:document-units="px"
      inkscape:current-layer="layer11"
@@ -2664,7 +2675,7 @@
      id="layer2"
      inkscape:label="sustanability_solution"
      transform="translate(72.443848,320.05585)"
-     style="display:none">
+     style="display:inline">
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow1Mend-8-5-3-8)"
        d="M 1013.5605,372.42708 909.42068,498.92558"
@@ -2742,7 +2753,7 @@
      id="layer11"
      inkscape:label="more_deployment"
      transform="translate(-14.173225,-14.173237)"
-     style="display:inline">
+     style="display:inline;filter:url(#filter5154)">
     <image
        transform="translate(86.617073,334.22908)"
        style="display:inline"
