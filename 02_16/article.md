@@ -1,30 +1,51 @@
 Comment fixer les problèmes de déploiement et de durabilité des outils en bioinformatique?
 ======
 
-Actuellement, des données biologiques massives sont générées pour répondre aux questions posées par les chercheurs. Ces données sont très diverses: données génomiques, images, etc, tout comme les questions. Pour manipuler les données et extraire les informations utiles, des solutions et outils bioinformatiques sont nécessaires. De nombreux outils existent déjà pour répondre à de nombreuses questions. Mais parfois, des nouveaux outils sont nécessaires pour répondre à une question spécifique. Intervient alors le développement d'outils bioinformatique. 
+Actuellement, des données biologiques sont générées à des vitesses folles pour répondre aux questions posées par les chercheurs. La diversité des questions entraine une diversité des données : génomiques, images, _etc_. Pour manipuler les données et extraire les informations utiles, des solutions et outils bioinformatiques sont nécessaires. De nombreux outils existent déjà pour répondre à de nombreuses questions. Mais parfois, des nouveaux outils sont nécessaires pour répondre à une question spécifique. Intervient alors le développement d'un nouvel outil bioinformatique.
 
 
-# Comment développer un outil bioinformatique? Le chemin idéal
+# Développer et distribuer un outil bioinformatique : le chemin idéal
 
-Lorsque vous développez un outil bioinformatique, vous le faites dans le but premier de répondre à une question. Du code source peut être généré (dans n'importe quel langage). Ce code source peut être distribué et déployé tel quel, ce qui est facile lorsque l'outil est simple, avec peu de dépendance et déployé localement. 
+Lorsque vous développez un outil bioinformatique, vous le faites dans le but premier de répondre à une question. Une fois celle-ci correctement formulée, vous choisissez votre méthode de travail et les outils ([1](http://bioinfo-fr.net/the-bio-code-guide-du-bon-bioinformaticien) [2](http://bioinfo-fr.net/introduction-sur-les-bonnes-pratiques-de-developpement)) qui vous aiderons à bien gérer votre projet. Par exemple, si vous avez choisi Java pour développer votre projet, il se peut que vous utilisiez [Git](http://bioinfo-fr.net/git-premiers-pas) comme gestionnaire de versions et [Maven](https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html) comme gestionnaire de _build_.
 
-Pour faciliter le déploiement et l'utilisation de l'outil, le code peut être packagé grâce à un gestionnaire de paquets. De nombreux gestionnaire de paquets existent: spécifiques à un langage ([pip](), [CPAN](), [CRAN](), etc), spécifiques à un système d'exploitation ([yum](), [apt-get](), etc), etc. Une fois packagé, l'outil derrière le code peut ainsi être faciliment déployé et utilisés par les utilisateurs ciblés. 
+Vous avez donc écrit du code source et vous pouvez être amener à le publier pour expliquer votre méthode (sinon, ce n'est pas de la science reproductible, donc pas de la science, et tac!). Il vous est alors possible de distribuer votre programme de bien des façons :
 
-Pour aider les utilisateurs, répandre l'outil et en faire la publicité, de la documentation, de la formation et du support doivent aussi être fournis. 
+- [en imprimant le code (PDF)](http://api.rue89.nouvelobs.com/sites/news/files/assets/document/2016/10/algorithme.pdf) (Ceci est un troll)
+- sous la forme d'un [espace web dédiée](https://blast.ncbi.nlm.nih.gov)
+- via une plateforme de partage de code source, avec les instructions qui vont bien
 
-![](images/tool_development_golden_path.png)
+Le partage des sources est primordial pour assurer la transparence, mais il peut être particulièrement difficile d'installer correctement un logiciel (multitude de dépendances, incompatibilité entre des versions, _etc_). Le constat est simple : si votre algorithme est révolutionnaire mais que personne ne peut l'utiliser, "je ne lui prédis pas un grand avenir" (#OSS117).
 
-Question, développement de code source, packaging, déploiement, documentation, formation et support forment la voie idéal de développemet d'un outil en bioinformatique.
+> FIGURE 1
+> "question -> dev -> ( support, formation, doc, distribution ) -> déploiement -> utilisation"
+> qui situe le développeur et l'utilisateur (l'utilisateur est en charge du déploiement, et donc de gérer les dépendances)
 
-Cette voie royale fonctionne bien lorsque l'outil est simple et ne dépend pas de trop nombreux autres outils. 
+Cette voie royale fonctionne bien lorsque l'outil est simple et ne dépend pas de trop nombreux autres outils. Cependant, la phase de déploiement reste à la charge de l'utilisateur (ou de l'admin sys du labo). Et le déploiement d'un logiciel est la proie de deux grands fléaux :
 
-Qui n'a jamais eu à faire avec une dépendance manquante? La dépendance peut ne plus être disponible pour de nombreuses raisons : non maintenue, serveur de stockage éteint, ... Nous sommes donc face à un problème de durabilité des outils. Il y a aussi les nombreux problèmes de déploiement de certaines versions d'outils: non disponible pour un sytème d'exploitation ou pour certaines versions de certains systèmes d'exploitation. 
+- les dépendances manquantes (OHMYGOD!)
+- les versions des dépendances (I'MGONNADIE!!)
 
-Ces deux problèmes de déploiement et durabilité des outils ont des impacts importants sur la productivité et la reproductibilité en sciences. Il devient donc urgent de résoudre ces deux questions et rendre la bioinformatique meilleure!
+Il s'en suit alors un casse-tête dantesque où l'utilisateur doit installer impeccablement _TOUTES_ les bonnes versions de _TOUTES_ les dépendances (si on peut encore les trouver et si elles sont compatibles avec son système, évidemment). __A LA MAIN !__ C'est évidemment une source colossale de fausse manip' et de découragement pour l'utilisateur, qui préfèrera alors se tourner vers une solution alternative.
 
-# Le déploiement
+Nous sommes donc face à un double problème de durabilité des outils et de leur déploiement. Ceux-ci ont des impacts importants sur la productivité et la reproductibilité en sciences. Il devient donc urgent de résoudre ces deux questions et rendre la bioinformatique meilleure !
 
-Pour qu'un outil soit utilisé, il doit être facilement déployable n'importe où. Pour cela, il faut le package avec un gestionnaire de paquets qui soit :
+# Faciliter le déploiement d'un logiciel
+
+Les problèmes précédemment cités sont une chose que les utilisateurs de systèmes Linux/OSX ne connaissent qu'à moitié, puisque rares sont ceux qui installent tout à la main. Le commun des mortels utilise, quand il le peut, un gestionnaire de paquets. Il en existent plusieurs étant pour la plupart spécifique :
+
+- à un langage ([pip]() pour Python, [CPAN]() pour Perl, [CRAN]() pour R, _etc_)
+- à un système d'exploitation ([yum]() pour Fedora, [APT]() pour Debian, [howebrew]() pour OSX, _etc_)
+
+> FIGURE 2
+> "question -> dev -> ( support, formation, doc, packaging ) -> déploiement -> utilisation"
+> qui situe le développeur, le gestionnaire de paquets et l'utilisateur (le dev est en charge du packaging, le gestionnaire de paquet pour le déploiement, et l'utilisateur pour l'utilisation)
+
+Le packaging demande un petit effort de la part du développeur, mais le déploiement de l'outil derrière le code est grandement facilité. L'utilisateur n'a a se préoccuper que de la partie "utilisation" (ce qui est somme toute plutôt logique). Pour que tout soit parfait, il est également nécessaire de documenter le logiciel, de proposer des formations, du support et d'en faire la publicité.
+
+
+# La solution à tous nos maux : Conda
+
+Pour qu'un outil soit utilisé, il doit être facilement déployable n'importe où. Pour cela, il faut le packagé avec un gestionnaire de paquets qui soit :
 
 - Indépendant d'un langage de programmation : Des outils bioinformatiques sont disponibles dans pratiquement tous les langages disponibles
 - Indépendent du système d'exploitation : Les outils sont utilisés sur les principaux systèmes d'exploitation
