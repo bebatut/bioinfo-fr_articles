@@ -47,40 +47,66 @@ Le packaging demande un petit effort de la part du développeur, mais le déploi
 
 Pour qu'un outil soit utilisé, il doit être facilement déployable n'importe où. Pour cela, il faut le packagé avec un gestionnaire de paquets qui soit :
 
-- Indépendant d'un langage de programmation : Des outils bioinformatiques sont disponibles dans pratiquement tous les langages disponibles
-- Indépendent du système d'exploitation : Les outils sont utilisés sur les principaux systèmes d'exploitation
-- Indépendant de privilèges super utilisateurs : Certains utilisateurs n'ont pas les droits d'administration de leur ordinateur
-- Capable de gérer plusieurs versions d'outils : Des versions différentes d'un outil peuvent être requises par différents outils
-- Compatible avec une utilisation sur le Cloud ou en environnement HPC
+- indépendant d'un langage de programmation : Des outils bioinformatiques sont disponibles dans pratiquement tous les langages disponibles
+- indépendent du système d'exploitation : Les outils sont utilisés sur les principaux systèmes d'exploitation
+- indépendant de privilèges super utilisateurs : Certains utilisateurs n'ont pas les droits d'administration de leur ordinateur
+- capable de gérer plusieurs versions d'outils : Des versions différentes d'un outil peuvent être requises par différents outils
+- compatible avec une utilisation sur le Cloud ou en environnement HPC
 
-[conda](https://conda.io/docs/intro.html) est un gestionnaire de paquets open-source qui répond très bien à ces problématiques. Bien que développé par la communauté PyData, conda est conçu pour gérer des paquets et dépendances de n'importe quel programme dans n'importe quel langage. conda est donc moins `pip` qu'une version multi système d'exploitation de `apt` et `yum`.
+[Conda](https://conda.io/docs/intro.html) est un gestionnaire de paquets open-source qui répond très bien à ces problématiques. Bien que développé par la communauté PyData, conda est conçu pour gérer des paquets et dépendances de n'importe quel programme dans n'importe quel langage. Conda est donc moins `pip` qu'une version multi-système d'exploitation de `apt` et `yum`.
 
-Un paquet conda correspond à un fichier tarball contenant des librairies au niveau système, Python ou d'autres modules, des programmes exécutables ou d'autres composants. En distribuant des outils précompilés, l'installation de paquet conda est rapide, robuste et facile : 
+Un paquet conda correspond à un fichier tarball contenant des librairies au niveau système, Python ou d'autres modules, des programmes exécutables ou d'autres composants. En distribuant des outils précompilés, l'installation de paquet conda est rapide, robuste et facile :
 
+
+## Les principales fonctionnalités de conda
+
+Conda permet donc de gérer différents logiciels, un peu à la manière de `apt` du point de vue de l'utilisateur. On retrouve les commandes suivantes :
+
+``` bash
+$ conda list               # lister les paquets installés
+$ conda search deeptools   # rechercher les paquets qui pourraient correspondre à "deeptools"
+$ conda install deeptools  # installer le paquet "deeptools"
+$ conda update deeptools   # mettre à jour (si possible) le paquet "deeptools"
+$ conda remove deeptools   # supprimer le paquet "deeptools"
+$ conda help               # vous laisser découvrir toute la beauté de conda
 ```
-$ conda install deeptools
-```
 
-conda garde une trace des dépendances entre les paquets et les plateformes. conda vient aussi avec une application de gestion d'environnement, sur le même principe que les environnements virtuels de Python. Un [environnement conda](https://conda.io/docs/using/envs.html) est un dossier contenant une collection spécifique de paquets conda installés. Ce principle permet de gérer l'installation et la gestion de plusieurs versions d'outils, comme Python 2.7 et Python 3.5 par exemple.
 
-Encore des résistances vis à vis de Conda? Je vous conseille de lire ce [blog post](https://jakevdp.github.io/blog/2016/08/25/conda-myths-and-misconceptions/) sur les mythes et fausses idées liées à Conda. 
+Conda garde une trace des dépendances entre les paquets et les plateformes. Par exemple, `deeptools` a besoin de `python`, `numpy 1.9.0+` et `scipy 0.17.0+` entre autres. Conda se charge d'installer ou mettre à jour ses dépendances si besoin, ainsi que les dépendances de ces dépendances, _etc_.
 
-Envie d'écrire un paquet conda pour un outil ? On pourrait penser que cela est difficile étant donnés les avantages apportés par conda. Mais au contraire, l'écriture de paquets conda a été pensée pour être facile et permettre ainsi à tous d'intégrer les outils dans conda avec une [documentation extensive](https://conda.io/docs/building/build.html). Ainsi, un paquet conda consiste en deux fichiers : 
 
-- Un fichier YAML contenant les méta-données du paquet : nom, où trouver les sources de l'outil, dépendances de l'outil, ... 
-- Un fichier BASH pour expliquer comment conda doit créer le paquet
+Conda vient aussi avec une gestion d'__environnements virtuels__, sur le même principe que les environnements virtuels de Python. Un [environnement conda](https://conda.io/docs/using/envs.html) est un dossier contenant une collection spécifique de paquets conda installés mais isolés des autres environnement conda. Ce principle permet l'installation et la gestion de plusieurs versions d'outils, comme Python 2.7 et Python 3.5 par exemple. Vous pouvez alors créer des environnements dédiés qui assureront la reproductibilité de vos analayses.
 
-![](images/conda_package.png)
+Encore des réticences vis à vis de Conda ? Je vous conseille de lire ce [blog post](https://jakevdp.github.io/blog/2016/08/25/conda-myths-and-misconceptions/) sur les mythes et fausses idées liées à Conda. 
 
-Les *channels* sont les chemins que prend conda pour chercher des paquets. Les outils assez généralistes peuvent être trouvé dans le channel [*conda-forge*](https://conda-forge.github.io/). Spécialisés dans les outils bioinformatiques, le *channel* [Bioconda](https://bioconda.github.io) est consiste en :
+
+## Les _channels_
+
+En bon gestionnaire de paquet, conda offre la possibilité d'ajouter d'autres sources de paquets, aussi appellées _channels_. Les outils assez généralistes peuvent être trouvé dans le channel *default* ou [*conda-forge*](https://conda-forge.github.io/). Spécialisés dans les outils bioinformatiques, le *channel* [Bioconda](https://bioconda.github.io) est consiste en :
 
 - Un [dépôt GitHub](https://github.com/bioconda/bioconda-recipes) de recettes
 - Un système de construction qui transforme ces recettes en paquet conda
-- Un répertoire de plus de 2 000 paquets bioinformatiques prêt à être utilisés
+- Un répertoire de plus de [2 000 paquets bioinformatiques](https://bioconda.github.io/recipes.html) prêt à être utilisés
 
-Avec resque 200 contributeurs, cette communauté accueillante et formée il y a un peu plus de 1 an grossit rapidement. Elle permet d'ajouter, modifier, mettre à jour et maintenir les nombreuses recettes des paquets conda d'outils bioinformatiques. 
+Avec presque 200 contributeurs, cette communauté accueillante et formée il y a un peu plus de 1 an grossit rapidement. Elle permet d'ajouter, modifier, mettre à jour et de maintenir les nombreuses recettes des paquets conda d'outils bioinformatiques existant, mais vous donnera tout un tas de conseils pour parfaire vos recettes.
 
-Pour faciliter le déploiement tout en suivant les besoins évoqués précédemment, un autre moyen de packager un outil est de le containeriser. La containerisation la plus connues est [Docker](https://www.docker.com/), mais il existe d'autres solutions comme [rkt](https://github.com/coreos/rkt) ou [Singularity](http://singularity.lbl.gov/). Ces containeurs permettent d'obtenir un plus haut niveau d'abstraction du système de base pour un outil. 
+
+# Bioconda
+
+## Packager un logiciel
+
+Envie d'écrire un paquet conda pour un outil existant ? On pourrait penser que cela est difficile étant donnés les avantages apportés par conda. Mais au contraire, l'écriture de paquets conda a été pensée pour être facile et permettre ainsi à tous d'intégrer les outils dans conda avec une [documentation extensive](https://conda.io/docs/building/build.html). Ainsi, un paquet conda consiste en deux fichiers : 
+
+- Un fichier `meta.yaml` contenant les méta-données du paquet : nom, où trouver les sources de l'outil, dépendances de l'outil, ... 
+- Un fichier `build.sh` pour expliquer comment conda doit créer le paquet
+
+![](images/conda_package.png)
+
+Bioconda propose [un guide](https://bioconda.github.io/contributing.html) pour écrire des recettes qui seront par la suite intégrées.
+
+## Bioconda va même encore plus loin !
+
+Pour faciliter le déploiement tout en suivant les besoins évoqués précédemment, un autre moyen de packager un outil est de le _containeriser_. La containerisation la plus connues est [Docker](https://www.docker.com/), mais il existe d'autres solutions comme [rkt](https://github.com/coreos/rkt) ou [Singularity](http://singularity.lbl.gov/). Ces containeurs permettent d'obtenir un plus haut niveau d'abstraction du système de base pour un outil.
 
 La création de containeurs pour un outil est plus complexes que pour créer un paquet conda. Par exemple, pour créer un containeur Docker, il faut créer un fichier *Dockerfile* décrivant l'image de base utilisées, les commandes pour créer l'outil, ...
 
@@ -88,15 +114,16 @@ La création de containeurs pour un outil est plus complexes que pour créer un 
 
 ![](images/mulled_scheme.png)
 
-Pour des paquets Bioconda, c'est encore plus facile : il n'y a rien à faire. Mulled parcourre tous les paquets Bioconda tous les jours et génère des BioContainer automatiquement pour tous les paquets BioConda.
+Pour des paquets Bioconda, c'est encore plus facile : il n'y a rien à faire. Mulled parcourt tous les paquets Bioconda quotidiennement et génère des BioContainers automatiquement pour tous les paquets Bioconda.
 
 ![](images/tool_deployment.png)
 
-En packageant les outils avec conda au sein de Bioconda, on résoud le problème de déploiement des outils. Les outils deviennent facilement déployable via les paquets conda ou via des BioContainer construits automatiquement.
+En packageant les outils avec conda au sein de Bioconda, on résoud le problème de déploiement des outils. Les outils deviennent facilement déployable _via_ les paquets conda ou via des BioContainer construits automatiquement.
+
 
 # La durabilité et disponibilité
 
-Un outil peut dépendre de nombreux autres outils, qui peuvent ne plus être maintenus ou même disponibles. Ce problème de disponibilité des outils posent de nombreux problèmes dont celui de reproductibilité et durabilité. 
+Un outil peut dépendre de nombreux autres outils, qui peuvent ne plus être maintenus ni même disponibles. L'indisponibilité des outils posent de nombreux problèmes dont celui de reproductibilité et durabilité.
 
 Pour résoudre ces problèmes, l'idéal serait d'avoir un stockage permanent de toutes les versions des paquets et outils utilisés pour qu'ils soient toujours accessibles. 
 
@@ -106,11 +133,11 @@ Ajouter un paquet dans ce dépôt est facile. Il suffit d'ajouter une ligne dans
 
 ![](images/tool_sustainability.png)
 
-Avec la sauvegarde automatique des paquets Bioconda au sein de Cargo Port, le problème de durabilité et disponibilité des outils est fixé.
+Avec la sauvegarde automatique des paquets Bioconda au sein de Cargo Port, le problème de durabilité et disponibilité des outils est résolu.
 
 # Déploiement et durabilité des outils en bioinformatique: Fixés !
 
-Le développement des paquets Bioconda est très facile et facilite le packaging et le déploiement de tout outil bioinformatique. Avec le projet Muller, des containeurs Linux efficaces sont automatiquement construits pour tous paquets conda pour permettre un plus haut niveau d'abstraction et d'isolation par rapport au système de base. C'est un super effort de différentes communautés pour créer un système flexible et extensible pour fixer le problème de déploiement une fois pour toute.
+Le développement des paquets Bioconda est très facile et facilite le packaging et le déploiement de tout outil bioinformatique. Avec le projet Mulled, des containeurs Linux efficaces sont automatiquement construits pour tous paquets Bioconda pour permettre un plus haut niveau d'abstraction et d'isolation par rapport au système de base. C'est un super effort de différentes communautés pour créer un système flexible et extensible pour fixer le problème de déploiement une fois pour toute.
 
 L'interface avec paquets Bioconda avec Cargo Port améliore la disponibilité et la durabilité en conservant toutes les sources.
 
